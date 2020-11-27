@@ -5,7 +5,7 @@ import { InputTypes } from 'projects/formi/src/lib/models/formi.model';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'demo-formi';
@@ -14,5 +14,9 @@ export class AppComponent {
 
   submit() {
     console.log('submitted');
+  }
+
+  loginSubmit($event) {
+    console.log($event);
   }
 }

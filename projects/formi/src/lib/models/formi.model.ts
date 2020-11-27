@@ -1,27 +1,52 @@
+import { AbstractControlOptions, Validator, ValidatorFn } from '@angular/forms';
+import { fillConstructor } from '../helpers/object.helper';
+
 export interface FormiSchemas {
   schema: {
     title?: string;
-    inputs: FormiInput[];
+    controls: FormiControl[];
   };
 }
 
-export interface FormiInput {
+export class FormiControl {
   /**
    * @caption This property top of input show text.
    */
   caption?: string;
   /**
-   * @type This property specifies the type of input.
-   */
-  type: InputType;
-  /**
-   *
+   * @name
    */
   name: string;
   /**
    * @required
    */
   required?: boolean;
+  /**
+   * @validations
+   */
+  validations?: Validation;
+  /**
+   * @validatorOrOpts
+   */
+  validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null;
+  /**
+   * @value
+   */
+  value?: string | number | any;
+}
+
+export class FormiInput extends FormiControl {
+  constructor(config: FormiInput) {
+    super();
+
+    fillConstructor(config);
+  }
+
+  /**
+   * @type This property specifies the type of input.
+   */
+  type: InputType;
+
   /**
    * @placeholder
    */
@@ -30,11 +55,26 @@ export interface FormiInput {
    * @mask
    */
   mask?: string;
-  /**
-   * @value
-   */
-  value?: string;
-  validations?: Validation;
+}
+
+export class FormiSelect extends FormiControl {
+  constructor(config: FormiSelect) {
+    super();
+
+    fillConstructor(config);
+  }
+
+  options: FormiSelectOption[];
+}
+
+export enum FormiSelectType {
+  'select' = 'select',
+}
+
+export interface FormiSelectOption {
+  value: string | number | any;
+  displayText: string;
+  selected: boolean;
 }
 
 export interface Validation {
@@ -67,6 +107,8 @@ export type InputType =
   | 'time'
   | 'url'
   | 'week';
+
+export type SelectType = 'select';
 
 export enum InputTypes {
   'button' = 'button',

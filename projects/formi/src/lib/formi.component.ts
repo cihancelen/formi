@@ -24,7 +24,7 @@ import { FormiOutput } from './models/output.model';
       <legend>{{ schemas.schema.title }}</legend>
 
       <form [formGroup]="formGroup" (ngSubmit)="submit($event)">
-        <ng-container *ngFor="let input of schemas.schema.inputs">
+        <ng-container *ngFor="let input of schemas.schema.controls">
           <label>
             {{ input.caption }}
             <input
@@ -60,18 +60,24 @@ export class FormiComponent implements OnInit, OnChanges {
   private groupForm() {
     const form = {};
 
-    this.schemas.schema.inputs.forEach((input) => {
+    this.schemas.schema.controls.forEach((input) => {
       const { min = null, max = null, minLength = null, maxLength = null } =
         input?.validations || {};
+
+      const required = input.required;
 
       const validators = [
         min ? Validators.min(min) : null,
         max ? Validators.max(max) : null,
         minLength ? Validators.minLength(minLength) : null,
         maxLength ? Validators.maxLength(maxLength) : null,
+        required ? Validators.required : null,
       ].filter((v) => v);
 
-      form[input.name] = new FormControl(input.value, validators);
+      form[input.name] = new FormControl(
+        input.value,
+        input.validatorOrOpts || validators
+      );
     });
 
     return form;

@@ -11,6 +11,6 @@
   }
 </style>
 
-<formi [schema]="loginSchema"></formi>
+<formi [schema]="loginSchema" (onSubmit)="loginSubmit($event)"></formi>
 
 <router-outlet></router-outlet>
